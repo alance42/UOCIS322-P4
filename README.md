@@ -6,7 +6,7 @@ Author: Avi Lance
 
 Contact: alance@uoregon.edu
 
-#Users:#
+# Users #
 
 If the Control Distance is greater than the Brevet Distance, it will return the given starting date with no change in the open and close time column.
 
@@ -14,7 +14,7 @@ If the Control Distance is negative or greater than 1000, it will return the giv
 
 If the Control Distance is equal to 0, then the opening time will remain unchanged, while the closing time will be 1 hour past the starting time as per the non-French algorithm.
 
-#Developers:#
+# Developers #
 
 In order to run tests, execute run_tests.sh. If you would like to add tests place a new python file starting with the name "test" in the tests folder.
 

@@ -14,6 +14,8 @@ If the Control Distance is negative or greater than 1000, it will return the giv
 
 If the Control Distance is equal to 0, then the opening time will remain unchanged, while the closing time will be 1 hour past the starting time as per the non-French algorithm.
 
+If the Control Distance is equal to the Brevet Distance, the speed will be calculated based on the lower Control's speed.
+
 # Developers #
 
 In order to run tests, execute run_tests.sh. If you would like to add tests place a new python file starting with the name "test" in the tests folder.

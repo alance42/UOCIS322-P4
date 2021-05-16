@@ -18,6 +18,9 @@ def calculate(control_dist_km, brevet_dist_km, open):
 	timeDiff = 0
 	pastDistance = 0
 	index = 2 if open else 1
+
+	if control_dist_km > brevet_dist_km:
+		return 0 
 	
 	if control_dist_km < 0 or control_dist_km > 1000:
 		return 0

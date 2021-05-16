@@ -51,13 +51,14 @@ def _calc_times():
 	"""
 	app.logger.debug("Got a JSON request")
 	km = request.args.get('km', 999, type=float)
-	brevetDist = request.args.get('brevet_Dist', 999, type=float)
+	brevetDist = request.args.get('brevetDist', type=float)
 	startTime = request.args.get('startTime', type=str)
 	startarrow = arrow.get(startTime, "YYYY-MM-DDTHH:mm")
 
 	startarrow = startarrow.shift(hours=8)
 	app.logger.debug(f"km={km}")
 	app.logger.debug(f"request.args: {request.args}")
+	app.logger.debug(f"brevertDist={brevetDist}")
 
 	# FIXME!
 	# Right now, only the current time is passed as the start time

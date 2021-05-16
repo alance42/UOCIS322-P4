@@ -23,7 +23,7 @@ def calculate(control_dist_km, brevet_dist_km, open):
 		return 0
 
 	if control_dist_km == 0:
-		return 60
+		return 0 if open else 60
 
 	for i in range(len(speedData)-1, -1, -1):
 		if control_dist_km > speedData[i][0]:
@@ -49,7 +49,6 @@ def open_time(control_dist_km, brevet_dist_km, brevet_start_time):
 	time = calculate(control_dist_km, brevet_dist_km, True)
 	brevet_start_time = brevet_start_time.shift(minutes=(time % 60))
 	brevet_start_time = brevet_start_time.shift(hours=(time // 60))
-	brevet_start_time.to('local').to('utc')
 	return brevet_start_time
 
 
@@ -69,5 +68,4 @@ def close_time(control_dist_km, brevet_dist_km, brevet_start_time):
 	time = calculate(control_dist_km, brevet_dist_km, False)
 	brevet_start_time = brevet_start_time.shift(minutes=(time % 60))
 	brevet_start_time = brevet_start_time.shift(hours=(time // 60))
-	brevet_start_time.to('local').to('utc')
 	return brevet_start_time

@@ -26,14 +26,14 @@ CONFIG = config.configuration()
 @app.route("/")
 @app.route("/index")
 def index():
-    app.logger.debug("Main page entry")
-    return flask.render_template('calc.html')
+	app.logger.debug("Main page entry")
+	return flask.render_template('calc.html')
 
 
 @app.errorhandler(404)
 def page_not_found(error):
-    app.logger.debug("Page not found")
-    return flask.render_template('404.html'), 404
+	app.logger.debug("Page not found")
+	return flask.render_template('404.html'), 404
 
 
 ###############
@@ -44,31 +44,38 @@ def page_not_found(error):
 ###############
 @app.route("/_calc_times")
 def _calc_times():
-    """
-    Calculates open/close times from miles, using rules
-    described at https://rusa.org/octime_alg.html.
-    Expects one URL-encoded argument, the number of miles.
-    """
-    app.logger.debug("Got a JSON request")
-    km = request.args.get('km', 999, type=float)
-    app.logger.debug("km={}".format(km))
-    app.logger.debug("request.args: {}".format(request.args))
-    # FIXME!
-    # Right now, only the current time is passed as the start time
-    # and control distance is fixed to 200
-    # You should get these from the webpage!
-    open_time = acp_times.open_time(km, 200, arrow.now().isoformat).format('YYYY-MM-DDTHH:mm')
-    close_time = acp_times.close_time(km, 200, arrow.now().isoformat).format('YYYY-MM-DDTHH:mm')
-    result = {"open": open_time, "close": close_time}
-    return flask.jsonify(result=result)
+	"""
+	Calculates open/close times from miles, using rules
+	described at https://rusa.org/octime_alg.html.
+	Expects one URL-encoded argument, the number of miles.
+	"""
+	app.logger.debug("Got a JSON request")
+	km = request.args.get('km', 999, type=float)
+	brevetDist = request.args.get('brevet_Dist',  type=int)
+	startTime = request.args.get('startTime', type=str)
+	startarrow = arrow.get(startTime, "YYYY-MM-DDTHH:mm")
+
+	startarrow = startarrow.shift(hours=8)
+	app.logger.debug(f"km={km}")
+	app.logger.debug(f"request.args: {request.args}")
+
+	# FIXME!
+	# Right now, only the current time is passed as the start time
+	# and control distance is fixed to 200
+	# You should get these from the webpage!
+
+	open_time = acp_times.open_time(km, brevetDist, startarrow)
+	close_time = acp_times.close_time(km, brevetDist, startarrow)
+	result = {"open": open_time.isoformat().format('YYYY-MM-DDTHH:mm'), "close": close_time.isoformat().format('YYYY-MM-DDTHH:mm')}
+	return flask.jsonify(result=result)
 
 
 #############
 
 app.debug = CONFIG.DEBUG
 if app.debug:
-    app.logger.setLevel(logging.DEBUG)
+	app.logger.setLevel(logging.DEBUG)
 
 if __name__ == "__main__":
-    print("Opening for global access on port {}".format(CONFIG.PORT))
-    app.run(port=CONFIG.PORT, host="0.0.0.0")
+	print("Opening for global access on port {}".format(CONFIG.PORT))
+	app.run(port=CONFIG.PORT, host="0.0.0.0")

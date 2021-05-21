@@ -12,7 +12,9 @@ If the Control Distance is greater than the Brevet Distance, it will return the 
 
 If the Control Distance is negative or greater than 1000, it will return the given starting date with no change in the open and close time column.
 
-If the Control Distance is equal to 0, then the opening time will remain unchanged, while the closing time will be 1 hour past the starting time as per the non-French algorithm.
+If the Control Distance is equal to 0, then the opening time will remain unchanged, while the closing time will be 1 hour past the starting time.
+
+If the Control Distance is less than 60 and greater than 0, the closing time will use 20 km/hr with an additional hour added ontop of the calculation. 
 
 If the Control Distance is equal to the Brevet Distance, the speed will be calculated based on the lower Control's speed.
 

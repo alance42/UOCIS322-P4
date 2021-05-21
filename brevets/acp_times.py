@@ -25,8 +25,8 @@ def calculate(control_dist_km, brevet_dist_km, open):
 	if control_dist_km < 0 or control_dist_km > 1000:
 		return 0
 
-	if control_dist_km == 0:
-		return 0 if open else 60
+	if not open and control_dist_km < 60:
+		return round((control_dist_km / 20 * 60) + 60)
 
 	for i in range(len(speedData)-1, -1, -1):
 		if control_dist_km > speedData[i][0]:
@@ -34,7 +34,7 @@ def calculate(control_dist_km, brevet_dist_km, open):
 			tempDist = control_dist_km - pastDistance - speedData[i][0]
 			pastDistance += tempDist
 			timeDiff += (tempDist / speed) * 60
-			
+
 	return round(timeDiff)
 
 def open_time(control_dist_km, brevet_dist_km, brevet_start_time):
@@ -67,8 +67,9 @@ def close_time(control_dist_km, brevet_dist_km, brevet_start_time):
 	   A date object indicating the control close time.
 	   This will be in the same time zone as the brevet start time.
 	"""
-
+	
 	time = calculate(control_dist_km, brevet_dist_km, False)
+
 	brevet_start_time = brevet_start_time.shift(minutes=(time % 60))
 	brevet_start_time = brevet_start_time.shift(hours=(time // 60))
 	return brevet_start_time

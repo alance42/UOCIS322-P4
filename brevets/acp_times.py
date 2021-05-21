@@ -12,18 +12,21 @@ import arrow
 #  these signatures even if you don't use all the
 #  same arguments.
 #
-speedData = [[0, 15, 34], [200, 15, 32 ], [400, 15, 30], [600, 11.428, 28]]
+speedData = [[0, 15, 34], [200, 15, 32], [400, 15, 30], [600, 11.428, 28]]
+totalBrevetException = [[200, 810, 353], [300, 1200, 540], [400, 1620, 728], [600, 2400, 1128], [1000, 4500, 1985]]
 
 def calculate(control_dist_km, brevet_dist_km, open):
 	timeDiff = 0
 	pastDistance = 0
 	index = 2 if open else 1
 
-	if control_dist_km > brevet_dist_km:
+	if control_dist_km > brevet_dist_km * 1.2 or control_dist_km < 0:
 		return 0 
-	
-	if control_dist_km < 0 or control_dist_km > 1000:
-		return 0
+
+	if control_dist_km >= brevet_dist_km:
+		for i in range(0, len(totalBrevetException)):
+			if brevet_dist_km == totalBrevetException[i][0]:
+				return totalBrevetException[i][index]
 
 	if not open and control_dist_km < 60:
 		return round((control_dist_km / 20 * 60) + 60)
@@ -67,7 +70,6 @@ def close_time(control_dist_km, brevet_dist_km, brevet_start_time):
 	   A date object indicating the control close time.
 	   This will be in the same time zone as the brevet start time.
 	"""
-	
 	time = calculate(control_dist_km, brevet_dist_km, False)
 
 	brevet_start_time = brevet_start_time.shift(minutes=(time % 60))
